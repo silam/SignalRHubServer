@@ -7,13 +7,21 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services.AddSignalR();
+builder.Services.AddCors(o => o.AddPolicy("AllowAnyOrigins", builder =>
+{
+    builder.AllowAnyOrigin()
+           .AllowAnyMethod()
+           .AllowAnyHeader();
+}));
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
-app.UseHttpsRedirection();
+app.UseCors("AllowAnyOrigins");
 
+app.UseHttpsRedirection();
+app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllers();
